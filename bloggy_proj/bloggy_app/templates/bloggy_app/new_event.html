@@ -1,0 +1,73 @@
+{% extends 'bloggy_app/base.html' %}
+
+{% load static %}
+
+{% block new_event %}class="colorlib-active"{% endblock new_event %}
+
+{% block title %} :: Новое событие{% endblock title %}
+
+{% block content %}
+    <h2>Новое событие</h2>
+    <form method="post" class="p-3 p-md-5 bg-light" style="width: 100%;" enctype="multipart/form-data">
+
+        {% csrf_token %}
+        {% for p in form %}
+        <div class="form-group">
+            {{ p.label }}
+                {{ p }}
+        <div style="color: red;">{{ p.errors }}</div>
+        </div>
+
+        {% endfor %}
+        <button type="submit" class="btn py-3 px-4 btn-primary" id="btn_ok">Ок</button>
+    </form>
+
+
+
+{% endblock content %}
+{% block script %}
+<script src="{% static 'js/urlRusLat.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $('#id_title').keyup( function() {
+        function validate_url() {
+        $.ajax({
+                  data: $('#id_url').serialize(),
+                  url: "{% url 'validate_url' %}",
+                  success: function (response) {
+                      if (response.url == $('#id_url').val()) {
+                              val = $('#id_url').val();
+                              console.log(val);
+                              if (isNaN(val[0])) {
+                                $('#id_url').val('0' + val.slice(1));
+<!--                                validate_url();-->
+                              } else {
+                                $('#id_url').val((1 + Number(val[0])) + val);
+                              }
+                      }
+                      else {
+                          $('#id_url').removeClass('is-invalid').addClass('is-valid');
+                          $('#usernameError').remove();
+                          $('#btn_ok').removeAttr('disabled');
+                      }
+                  },
+                  // если ошибка, то
+                  error: function (response) {
+                      // предупредим об ошибке
+                      console.log('Ошибка')
+                  }
+              });
+        }
+        var title = $('#id_title').val();
+        $('#id_url').val(urlRusLat(title));
+        validate_url();
+
+    }
+
+)
+
+</script>
+
+
+{% endblock script %}

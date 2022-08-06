@@ -1,0 +1,33 @@
+{% extends 'bloggy_app/base.html' %}
+
+{% load static %}
+
+{% block home %}class="colorlib-active"{% endblock home %}
+
+{% block content %}
+
+
+{% for event in events %}
+<div class="col-md-12">
+    <div class="blog-entry ftco-animate d-md-flex">
+        <a href="single.html" class="img img-2" style="background-image: url({{ event.poster.url }});"></a>
+        <div class="text text-2 pl-md-4">
+            <h3 class="mb-2"><a href="{{ event.url }}">{{ event.title }}</a></h3>
+            <div class="meta-wrap">
+                <p class="meta">
+                    <span><i class="icon-calendar mr-2"></i>{{ event.date_of_event }}</span>
+                    {% for category in event.categories.all %}
+                    <span><a href="?cat={{ category.url }}"><i
+                            class="icon-folder-o mr-2"></i>{{ category.title }}</a></span>
+                    {% endfor %}
+                </p>
+            </div>
+            <p><a href="#" class="btn-custom">Read More <span class="ion-ios-arrow-forward"></span></a></p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock content %}
+
