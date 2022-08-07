@@ -9,9 +9,11 @@ from django.conf import settings
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('new_event/', views.EventCreateView.as_view(), name='new_event'),
-    path('validate_url/', views.validate_url, name='validate_url'),
+    path('validate_slug/', views.validate_slug, name='validate_slug'),
     path('register/', views.RegisterUserView.as_view(), name='register'),
     path('<slug:slug>/', views.EventDetailView.as_view(), name='detail'),
+    path('login', views.LoginUser.as_view(), name='login'),
+    path('logout', views.logout_user, name='logout')
 ]
 
 

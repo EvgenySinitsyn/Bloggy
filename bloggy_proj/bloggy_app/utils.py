@@ -8,8 +8,8 @@ class DataMixin:
         if category == '':
             context['events'] = Event.objects.filter(draft=False).order_by('-date_of_event', '-id')
         else:
-            context['events'] = Event.objects.filter(draft=False, categories__url=category).order_by('-date_of_event', '-id')
-            context['cat'] = Category.objects.get(url=category).title
+            context['events'] = Event.objects.filter(draft=False, categories__slug=category).order_by('-date_of_event', '-id')
+            context['cat'] = Category.objects.get(slug=category).title
         context['popular_events'] = Event.objects.all().order_by('-views')[:3]
         context['categories'] = Category.objects.all().order_by('title')
 

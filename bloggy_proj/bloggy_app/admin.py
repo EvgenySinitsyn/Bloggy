@@ -13,16 +13,17 @@ class EventAdminForm(forms.ModelForm):
 
 class EventAdmin(admin.ModelAdmin):
     form = EventAdminForm
-    prepopulated_fields = {"url": ("title", )}
+    prepopulated_fields = {"slug": ("title", "description")}
     exclude = ('views',)
 
 
 class CategoryAdmin(admin.ModelAdmin):
 
-    prepopulated_fields = {"url": ("title", )}
+    prepopulated_fields = {"slug": ("title", )}
 
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventPhotos)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Profile)
 

@@ -19,7 +19,7 @@
         </div>
 
         {% endfor %}
-        <button type="submit" class="btn py-3 px-4 btn-primary" id="btn_ok">Ок</button>
+        <button type="submit" class="btn py-3 px-4 btn-primary">Ок</button>
     </form>
 
 
@@ -30,41 +30,33 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-    $('#id_title').keyup( function() {
-        function validate_url() {
-        $.ajax({
-                  data: $('#id_url').serialize(),
-                  url: "{% url 'validate_url' %}",
-                  success: function (response) {
-                      if (response.url == $('#id_url').val()) {
-                              val = $('#id_url').val();
-                              console.log(val);
-                              if (isNaN(val[0])) {
-                                $('#id_url').val('0' + val.slice(1));
-<!--                                validate_url();-->
-                              } else {
-                                $('#id_url').val((1 + Number(val[0])) + val);
-                              }
-                      }
-                      else {
-                          $('#id_url').removeClass('is-invalid').addClass('is-valid');
-                          $('#usernameError').remove();
-                          $('#btn_ok').removeAttr('disabled');
-                      }
-                  },
-                  // если ошибка, то
-                  error: function (response) {
-                      // предупредим об ошибке
-                      console.log('Ошибка')
-                  }
-              });
-        }
-        var title = $('#id_title').val();
-        $('#id_url').val(urlRusLat(title));
-        validate_url();
 
+function validate_slug(selector) {
+<!--отправка запроса на сервер для проверки наличия слага-->
+    $.ajax({
+        async: false,
+        data: $(selector).serialize(),
+        url: "{% url 'validate_slug' %}",
+        success: function (response) {
+          result = response.is_taken;
     }
+    });
+    return result;
+}
 
+<!--заполнение slug-->
+    $('#id_title').keyup( function() {
+        $('#id_slug').val(urlRusLat($('#id_title').val()) + '_');
+        while (validate_slug('#id_slug')) {
+            val = $('#id_slug').val();
+            if (val.slice(-1) == '_') {
+                $('#id_slug').val(val + '0');
+            } else {
+                num = +val.slice(val.lastIndexOf('_') + 1) + 1;
+                $('#id_slug').val(val.slice(0, val.lastIndexOf('_') + 1) + num);
+            }
+        }
+    }
 )
 
 </script>

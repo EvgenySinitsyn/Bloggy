@@ -40,7 +40,12 @@
                 <li><a href="contact.html">Contact</a></li>
                 <li {% block new_event %}{% endblock new_event %}><a href="{% url 'new_event' %}">New event</a></li>
                 <hr>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li {% block login %}{% endblock login %}><a href="{% url 'login' %}">Login</a></li>
                 <li {% block register %}{% endblock register %}><a href="{% url 'register' %}">Registration</a></li>
+                {% endif %}
             </ul>
         </nav>
 
@@ -89,7 +94,7 @@
                             <h3 class="sidebar-heading">Категории</h3>
                             <ul class="categories">
                                 {% for category in categories %}
-                                <li><a href="{% url 'home' %}?cat={{ category.url }}">{{ category.title }} <span>{{ category.events.all.count }}</span></a>
+                                <li><a href="{% url 'home' %}?cat={{ category.slug }}">{{ category.title }} <span>{{ category.events.all.count }}</span></a>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -101,7 +106,7 @@
                             <div class="block-21 mb-4 d-flex">
                                 <a class="blog-img mr-4" style="background-image: url({{ ev.poster.url }});"></a>
                                 <div class="text">
-                                    <h3 class="heading"><a href="{{ ev.url }}">{{ ev.title }}</a></h3>
+                                    <h3 class="heading"><a href="{{ ev.slug }}">{{ ev.title }}</a></h3>
                                     <div class="meta">
                                         <div><a href="#"><span class="icon-calendar"></span> June 28, 2019</a></div>
                                         <div><a href="#"><span class="icon-person"></span> {{ ev.created_by.username }}</a>
